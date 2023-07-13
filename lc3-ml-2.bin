@@ -1,0 +1,38 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Written by: Ian Peña
+; Date: 11/20/2022
+; Assignment: Lab 2
+;
+; Description:
+; Write a program that compares two values stored at memory locations 
+; x30A2 and x30A3. If the value at x30A2 is larger than the value at x30A3 then 
+; store the value of 1 in R1, else store the value of 0 in R1. Use PC + offset 
+; addressing to load contents of x30A2 into R2 and x30A3 into R3.
+;
+; Registers:
+; R1 - 1 when x30A2 greater than x30A3, 0 when not
+; R2 - Number, x30A2 via PC+Offset addressing
+; R3 - Number, x30A3 via PC+Offset addressing
+; R4 - Difference between R2 and R3
+;
+; Traps/Sys Calls:
+; TRAP x25 Halt program
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+0011 0000 0000 0000 ; ORIG x3000
+
+0101 001 001 1 00000 ; R1 <- 0
+0101 010 010 1 00000 ; R2 <- 0
+0101 011 011 1 00000 ; R3 <- 0
+0101 100 100 1 00000 ; R4 <- 0
+0010 010 0 1001 1101 ; R2 <- mem[x30A2]
+0010 011 0 1001 1101 ; R3 <- mem[x30A3]
+1001 011 011 11 1111 ; R3 <- -R3
+0001 011 011 1 00001 ; R3 + 1
+0001 100 010 0 00 011 ; R4 <-R2 + R3
+0000 100 0 0000 0010 ; Branch R1 <- 0 if R4 < 0
+0001 001 001 1 00001 ; R1 <- 1
+0000 111 0 0000 0001 ; Branch halt
+0101 001 001 1 00000 ; R1 <- 0
+
+1111 0000 0010 0101 ; TRAP x25 HALT

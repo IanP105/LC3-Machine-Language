@@ -1,0 +1,31 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Written by: Ian Peña
+; Date: 11/19/2022
+; Assignment: Lab 1
+;
+; Description:
+; Write a program that loops X times incrementing a counter each time 
+; through the loop. The value of X is stored in memory and will have to be 
+; accessed by indirect accessing (load indirect instruction).
+; The program starts at x3000 and the x3020 contains the address (x30A0)
+; for the value of X (which is x000F)
+;
+; Registers:
+; R1 - The sentinel of for loop
+; R2 - Counts the number of times through for loop
+;
+; Traps/Sys Calls:
+; TRAP x23 Halt program
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+0011 0000 0000 0000 ; ORIG x3000
+
+0101 001 001 1 00000 ; R1 is 0
+0101 010 010 1 00000 ; R2 is 0
+1010 001 0 0001 1101 ; R1 <- mem[mem[x3020]] (Indirect)
+0001 001 001 1 11111 ; Decrement R1
+0000 100 0 0000 0010 ; Branch halt
+0001 010 010 1 00001 ; Increment R2
+0000 111 1 1111 1100 ; Loop to top of for
+
+1111 000000100101 ; HALT
